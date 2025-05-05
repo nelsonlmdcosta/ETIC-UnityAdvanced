@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 330585548}
   - component: {fileID: 330585550}
   - component: {fileID: 330585549}
+  - component: {fileID: 330585551}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -272,11 +273,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b6a25f27fe0dca47bd0ec9462aed488, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Age: 0
-  AgeF: 10
-  <PropertyAccessorExampleForAgeV1>k__BackingField: 3.6
-  ExampleString: 
-  Numbers: 
+  ExposedType: 0
+  BetterExposedType: 0
+  <EvenBetterPropertyAccessor>k__BackingField: 0
 --- !u!114 &330585549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -356,6 +355,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &330585551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7aca718737d3e0d41abc3edf7de9673d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ArrayExample: 
+  ListExample: 
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
