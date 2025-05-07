@@ -57,8 +57,5 @@ public class Loops : MonoBehaviour
             Debug.Log($"Do While Example: { ListOfInts[i] }");
         }
         while ( ++i < ListOfInts.Count ) ;
-
     }
-
-
 }

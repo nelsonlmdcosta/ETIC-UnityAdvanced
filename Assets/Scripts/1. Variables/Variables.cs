@@ -2,6 +2,16 @@ using System;
 using System.Text;
 using UnityEngine;
 
+public enum EEnemyStates
+{
+    INVALID   = -1,
+    Idle      =  0,
+    Patrol    =  1,
+    Chasing   =  2,
+    Attacking =  3,
+    MAX            // For Loops
+}
+
 // Just add this to a gameobjec to see what variables are visible and which arent
 // Note: Visit 4. OOP folder to see why the usage of privates and publics
 public class Variables : MonoBehaviour
@@ -59,7 +69,7 @@ public class Variables : MonoBehaviour
         // Though this is nasty
         BasicStringType = Hello + World + SmilieFace;
 
-        // This is far better to use when possible
+        // This is far better to use when possible (String Interpolation)
         BasicStringType = $"{Hello}{World}{SmilieFace}";
         
         // To do it properly we can also use the StringBuilder This is always better than the + concatenation

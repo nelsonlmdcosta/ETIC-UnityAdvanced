@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,91 +32,139 @@ public class DerivedExample : Example
 }
 */
 
-public class OOP : MonoBehaviour
+public abstract class AAnimal
 {
-    // Variables
-    // Basic Types
-    private int BasicIntergerType;
-    
-    // I Will Kill You
-    public int Age;
+    public abstract void AbstractMakeNoise();
 
-    [SerializeField] private float AgeF = 10.0f;
-
-    
-    [field: SerializeField] public float PropertyAccessorExampleForAgeV1 { get; set; }
-    
-    public float PropertyAccessorExampleForAge
+    public virtual void VirtualMakeNoise()
     {
-        get { return AgeF; }
-        set { AgeF = value; }
-    }
-
-    protected string ExampleString;
-
-    private List<int> Numbers = new List<int>(100);
-    private IEnumerator Start()
-    {
-        for (int i = 0; i < Numbers.Count; ++i)
-        {
-            Numbers[i] = i;
-        }
-
-        IncrementingExample();
-
-        Debug.LogError("Part 1");
-        yield return new WaitForSeconds(3.0f);
-        Debug.LogError("Part 2");
-        
-    }
-
-    private void Update()
-    {
-        //ForLoopExample();
-        //ForeachLoopExample();
-    }
-
-    private void IncrementingExample()
-    {
-        int someInteger = 0;
-
-        Debug.Log(someInteger);     // 0
-        Debug.Log(++someInteger);   // 1
-        Debug.Log(someInteger++);   // 1
-        Debug.Log(someInteger);     // 2
-        
-        //Debug.Log(++someInteger);   // 1
-
-        // Debug.Log(++someInteger);
-        //someInteger += 1;
-        //Debug.Log(someInteger);     // 2
-        
-        // Debug.Log(someInteger++);
-        //D/ebug.Log(someInteger);     // 2
-        //someInteger += 1;
-
-    }
-
-    private void ForLoopExample()
-    {
-       
-        for (int i = 0; i < Numbers.Count; ++i)
-        {
-            Numbers[i] += 1;
-        }
-    }
-    
-    private void ForeachLoopExample()
-    {
-        foreach (int CurrentNumber in Numbers)
-        {
-            //CurrentNumber += 1;
-        }
-    }
-    
-    private Test ProcessData()
-    {
-        // Reference Counting
-        return null;//new Test(this);
+        Debug.Log("VirtualMakeNoise Not Overriden");
     }
 }
+
+public class Cat : AAnimal
+{
+    public override void AbstractMakeNoise()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void VirtualMakeNoise()
+    {
+        Debug.Log("Meow");
+    }
+}
+
+public class Dog : AAnimal
+{
+    public override void AbstractMakeNoise()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void VirtualMakeNoise()
+    {
+        Debug.Log("Woof");
+    }
+}
+
+public class Bird : AAnimal
+{
+    public override void AbstractMakeNoise()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void VirtualMakeNoise()
+    {
+        base.VirtualMakeNoise();
+        
+        Debug.Log("Chirp");
+    }
+}
+
+
+public class OOP : MonoBehaviour
+{
+    private List<Cat> CatList;
+    private List<Dog> DogList;
+    private List<Bird> BirdList;
+
+    private List<AAnimal> AnimalList;
+
+    private List<MonoBehaviour> Components;
+    
+    private void Start()
+    {
+        Cat catExample = new Cat();
+        Dog dogExample = new Dog();
+        Bird birdExample = new Bird();
+        
+        catExample.VirtualMakeNoise();
+        dogExample.VirtualMakeNoise();
+        birdExample.VirtualMakeNoise();
+        
+        //AnimalList.Add(catExample);
+        //AnimalList.Add(dogExample);
+        //AnimalList.Add(birdExample);
+        
+        //CatList.Add(catExample);
+        //CatList.Add(dogExample);
+        
+        //Components.Add(new Variables());
+        //Components.Add(new OOP());
+        
+        //Components.Add(new Cat());
+
+        StartCoroutine(WaitingExample());
+    }
+
+    private IEnumerator WaitingExample()
+    {
+        Debug.Log("Started Coroutine A");
+        
+        yield return new WaitForSeconds(1.0f);
+
+        Debug.Log("Started Coroutine B");
+
+        yield return StartCoroutine(WaitOnSecondCoroutine());
+
+        Debug.Log("Ended Coroutine B");
+        
+        Debug.Log("Ended Coroutine A");
+
+    }
+
+    private IEnumerator WaitOnSecondCoroutine()
+    {
+        // TIme Dilation
+        Time.timeScale *= 2;
+
+        Debug.Log("Coroutine B - Waiting");
+
+        // Affected by time dialtion
+        yield return new WaitForSeconds(1);
+
+        Debug.Log("Coroutine B - Waiting");
+
+        // Unnafected by time dilation
+        yield return new WaitForSecondsRealtime(1);
+
+        yield return new WaitUntil(new Func<bool>(WaitForCondition));
+    }
+
+    /*
+    private IEnumerator Start()
+    {
+        yield return new WaitForEndOfFrame();
+        
+        // Add Initialization Code Here
+    }
+    */
+
+    private bool WaitForCondition()
+    {
+        return Input.GetKeyDown(KeyCode.Space);
+    }
+}
+
