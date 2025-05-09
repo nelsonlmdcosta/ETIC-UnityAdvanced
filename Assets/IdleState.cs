@@ -1,18 +1,23 @@
 using System;
 using System.Collections;
-using System.Threading;
 using UnityEngine;
 
 public class IdleState : AStateBehaviour
 {
-    public override bool Initialize()
+    private LineOfSight LineOfSightComponent = null;
+    
+    private Coroutine RunningRoutine = null;
+    
+    public override bool InitializeState()
     {
-        return true;
+        LineOfSightComponent = GetComponent<LineOfSight>();
+        
+        return LineOfSightComponent != null;
     }
 
     public override void OnStateStart()
     {
-        StartCoroutine(WaitForTimeAndContinuePatrolling());
+        RunningRoutine = StartCoroutine(WaitForTimeAndContinuePatrolling());
     }
 
     public override void OnStateUpdate()
@@ -22,11 +27,15 @@ public class IdleState : AStateBehaviour
 
     public override void OnStateFinish()
     {
-        
+        if(RunningRoutine != null)
+            StopCoroutine(RunningRoutine);
     }
 
     public override Type StateTransitionCondition()
     {
+        if (LineOfSightComponent != null && LineOfSightComponent.HasSeenPlayerThisFrame())
+            return typeof(ChasingState);
+        
         return null;
     }
 

@@ -4,21 +4,32 @@ using UnityEngine.AI;
 
 public class PatrolState : AStateBehaviour
 {
-    private NavMeshAgent AIMover = null;
+    [SerializeField] private POIManager PatrolPath = null;
 
+    private LineOfSight LineOfSightComponent = null;
+    private NavMeshAgent AIMover = null;
     private Vector3 Destination = Vector3.zero;
+
+    private int POIIndex = 0;
     
-    public override bool Initialize()
+    public override bool InitializeState()
     {
         AIMover = GetComponent<NavMeshAgent>();
+        LineOfSightComponent = GetComponent<LineOfSight>();
         
-        return AIMover != null; /*&& other component && soem other component*/
+        return AIMover != null && LineOfSightComponent != null && PatrolPath != null;
     }
 
     public override void OnStateStart()
     {
         AIMover.enabled = true;
-        
+
+        Destination = PatrolPath.GetPOIAtIndex(POIIndex++).position;
+        if (!PatrolPath.IsIndexValid(POIIndex))
+        {
+            POIIndex = 0;
+        }
+
         AIMover.SetDestination(Destination);
     }
 
@@ -33,9 +44,14 @@ public class PatrolState : AStateBehaviour
 
     public override Type StateTransitionCondition()
     {
-        if (!AIMover.hasPath)
+        if (AIMover && !AIMover.hasPath)
         {
             return typeof(IdleState);
+        }
+
+        if (LineOfSightComponent && LineOfSightComponent.HasSeenPlayerThisFrame())
+        {
+            return typeof(ChasingState);
         }
 
         return null;
