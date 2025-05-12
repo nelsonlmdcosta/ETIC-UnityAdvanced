@@ -33,7 +33,7 @@ public class RudimentaryPlayer : MonoBehaviour
         // Three Types Of Actions
         //MovementAction.action.started += ActionStarted;
         MovementAction.action.performed += OnLocomtionActionPerformed;
-        //MovementAction.action.canceled += ActionCancelled;
+        //MovementAction.action.canceled += OnLocomtionActionPerformed; // Considering They're Doing The Exact Same Thing, I'll Register The Same Action That's It
         
         JumpAction.action.performed += OnJumpActionPerformed;
         JumpAction.action.canceled += OnJumpActionCancelled;
@@ -50,9 +50,13 @@ public class RudimentaryPlayer : MonoBehaviour
 
     private void FixedUpdate()
     {
+#if UNITY_6_0_OR_NEWER
         Vector3 CurrentVelocity = myRigidbody.linearVelocity;
         myRigidbody.linearVelocity = new Vector3(WorldDirection.x * MovementSpeed, CurrentVelocity.y, WorldDirection.z * MovementSpeed);
-
+#else
+        Vector3 CurrentVelocity = myRigidbody.velocity;
+        myRigidbody.velocity = new Vector3(WorldDirection.x * MovementSpeed, CurrentVelocity.y, WorldDirection.z * MovementSpeed);
+#endif
         if (IsGrounded && IsJumping)
         {
             myRigidbody.AddForce(Vector3.up * JumpImpulseForce, ForceMode.Impulse);

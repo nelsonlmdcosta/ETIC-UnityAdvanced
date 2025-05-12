@@ -68,7 +68,8 @@ public class CharacterMover : MonoBehaviour
         // Apply the movement in FixedUpdate for consistent physics
         if (currentVelocity != Vector3.zero)
         {
-            myRigidbody.linearVelocity = new Vector3(currentVelocity.x, myRigidbody.linearVelocity.y, currentVelocity.z);
+
+            myRigidbody.velocity = new Vector3(currentVelocity.x, myRigidbody.velocity.y, currentVelocity.z);
             
             // Rotate character to face movement direction
             if (currentVelocity.magnitude > 0.1f)
