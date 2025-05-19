@@ -1,10 +1,12 @@
 using System;
+using System.Runtime.Serialization;
 using UnityEngine;
-using UnityEngine.Events;
 
-public class RequestSaveAndLoadTest : MonoBehaviour
+public class RequestSaveAndLoadTest : MonoBehaviour, ISaveable
 {
     public int CurrentLives = 10;
+
+    public bool RuntimeIsFullscreen = true;
 
     public void Awake()
     {
@@ -28,10 +30,22 @@ public class RequestSaveAndLoadTest : MonoBehaviour
     public void OnSaveRequested(SaveData SaveDataObject)
     {
         SaveDataObject.LivesLeft = CurrentLives;
+
+        SaveDataObject.IsFullScreen = RuntimeIsFullscreen;
     }
 
     public void OnLoadRequested(SaveData SaveDataObject)
     {
         CurrentLives = SaveDataObject.LivesLeft;
+
+        RuntimeIsFullscreen = SaveDataObject.IsFullScreen;
+        Screen.fullScreen = RuntimeIsFullscreen;
+    }
+    
+    // Some UI Callback
+    public void OnFullScreenRadioButtonStateChanged(bool newState)
+    {
+        RuntimeIsFullscreen = newState;
+        Screen.fullScreen = RuntimeIsFullscreen;
     }
 }
